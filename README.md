@@ -2,6 +2,12 @@
 
 Public deliverables for the MEGA.dev support-desk exercise. The reports and tenants are course-provided scenario data. Only privacy-minimized aggregates and reviewed analysis are published here.
 
+## Live page
+
+GitHub Pages URL: https://mmz993.github.io/mega-s01e03/
+
+The repository's committed `pages.json` records the publishing source (`main`, root). `.nojekyll` serves the already-generated static files unchanged. No private build environment or raw export is uploaded. Configure the public site using `gh api --method POST repos/MMZ993/mega-s01e03/pages --input pages.json` once; inspect existing Pages settings before changing them. A configured URL alone is not evidence that deployment has completed.
+
 ## Direct entrypoints
 
 - [Incident review source](incident-review.svx): root-level signed SVX.
@@ -18,7 +24,7 @@ These entrypoints are generated from the canonical incident, retaining evidence 
 - [Parser issue](https://github.com/MMZ993/mega-s01e03/issues/1): 379 reports
 - [Hint issue](https://github.com/MMZ993/mega-s01e03/issues/2): 33 reports
 
-Download the repository and open the rendered HTML files in a browser to see the actual compiled pages, including tables, chart, layout and derived desk reference. GitHub's HTML source preview is not the rendered page. No hosting or deployment is implied.
+Download the repository and open the rendered HTML files in a browser to see the actual compiled pages, including tables, chart, layout and derived desk reference. GitHub's HTML source preview is not the rendered page; use the live GitHub Pages URL above for browser viewing.
 
 ## Evidence boundaries
 
