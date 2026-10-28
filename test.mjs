@@ -9,6 +9,20 @@ const weeks = JSON.parse(readFileSync('src/lib/kb/weeks.json'));
 const incident = readFileSync('rendered/kb/incidents/4471-review/index.html', 'utf8');
 const decision = readFileSync('rendered/kb/decisions/0002-dedupe-by-cause/index.html', 'utf8');
 
+test('root entrypoints expose the same signed incident with local navigation', () => {
+  const source = readFileSync('incident-review.svx', 'utf8');
+  const canonical = readFileSync('src/routes/kb/incidents/4471-review/+page.svx', 'utf8');
+  assert.equal(source, canonical.replace("signature: 'MMZ993'", "homeHref: './index.html'\nsignature: 'MMZ993'")
+    .replace('../../decisions/0002-dedupe-by-cause/index.html', './rendered/kb/decisions/0002-dedupe-by-cause/index.html'));
+  const html = readFileSync('index.html', 'utf8');
+  for (const marker of ['DR-0Y1V-P5HT', '379', '33', '5 read as a one-day move', '<svg']) assert.ok(html.includes(marker));
+  assert.ok(html.includes('href="./index.html"'));
+  assert.ok(html.includes('href="./rendered/kb/decisions/0002-dedupe-by-cause/index.html"'));
+  assert.ok(html.includes('href="./incident-review.svx"'));
+  assert.ok(!html.includes('href="/kb"'));
+  assert.ok(!html.includes('../../decisions/'));
+});
+
 test('distinct causes reconcile with independently verified source counts', () => {
   assert.equal(summary.exportRows, 427);
   assert.equal(summary.uniqueReports, 412);

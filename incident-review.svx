@@ -1,0 +1,51 @@
+---
+layout: runbook
+title: '#4471 review: two causes, not one queued fix'
+owner: support desk
+status: proposed
+reviewed: '2026-10-28'
+homeHref: './index.html'
+signature: 'MMZ993'
+---
+
+<script>
+  import ReviewEvidence from '#lib/kb/ReviewEvidence.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+This review supersedes the interpretation of the exported incident page, not its historical record. The export was taken on 4 October. This is a snapshot analysis, not a claim about the desk's current queue or deployed fixes.
+
+## What the executable evidence shows
+
+<ReviewEvidence />
+
+The published counts come from the supplied `uniqueById`, `groupByCause`, `causeOf`, `tenantOf`, and `readAs` logic. The export has overlapping pages: count each report ID once, retaining its last occurrence, and filter to `mergedInto === 4471`. Identical repeats do not represent extra reports.
+
+Cause follows the tenant's locale, booking-form version and report channel. The browser locale and intake label are not authoritative. Determine day-first ordering with `Intl.DateTimeFormat(...).formatToParts`, as the supplied code does; do not maintain a guessed locale list.
+
+## Separate engineering tickets
+
+- **Parser:** the shared parser reads month-first although the tenant writes day-first. This is the majority cause belonging to the original incident. Fix parsing to respect an explicit date-format contract; test day-first app/email paths and booking-v2 forms. See [parser issue](https://github.com/MMZ993/mega-s01e03/issues/1).
+- **Hint:** booking-v3 prints `MM/DD/YYYY`, but its form reads the tenant's day-first format. Correct the displayed hint and its consistency with actual interpretation. A parser-only fix does not establish that this form defect is fixed. See [hint issue](https://github.com/MMZ993/mega-s01e03/issues/2).
+
+The original cause table explicitly gives the hint group no ticket of its own. The incident's statement that there is one issue and one queued fix is therefore not supported by its own rendered evidence. The fixes above are proposals; neither implementation nor resolution is verified.
+
+## Symptoms are not proven root causes
+
+The desk read some reports as a one-day move, while the classifier files them under parser. The table preserves that count within parser, not in addition to it. This discrepancy merits investigation of expected/actual dates and timezone handling; it does not prove a third defect or justify changing the classifier's totals.
+
+## Queue history is not arrival history
+
+Reports begin in April; merging begins in July. The large merge spike represents consolidation of earlier reports, not an equally large surge of newly received reports. Keep received and merged series separate when describing impact. Reports continue through the export date; “known” is a workflow label, not evidence that impact stopped. The product's approximate user population is not a measured affected-user count.
+
+## Change the desk's deduplication decision
+
+Subject-only matching is not sufficient. The executable examples demonstrate both different subjects sharing a cause and identical subjects hiding distinct causes; missing tenant context cannot establish equivalence. See the proposed [replacement decision](./rendered/kb/decisions/0002-dedupe-by-cause/index.html).
+
+Preserve accepted decision 0001 unchanged. Read the governing logic and data alongside narrative, check review age, and consult current queue evidence before acting on this snapshot. A new incident page does not itself change the desk's active workflow.
+
+## Sources and privacy
+
+Evidence: the course-provided KB export, specifically `causes.ts`, `locales.ts`, `CauseTable.svelte`, `QueueTimeline.svelte`, `dedupe-cases.ts`, `desk-notes.json`, and report/tenant exports. Public data here contains aggregate counts only; raw reports, tenant records and authentication data are intentionally excluded. Rendered charts and tables use the checked-in aggregate snapshot; they are not a live feed.
+
+<RenderStamp {signature} />

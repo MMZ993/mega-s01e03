@@ -2,7 +2,14 @@
 
 Public deliverables for the MEGA.dev support-desk exercise. The reports and tenants are course-provided scenario data. Only privacy-minimized aggregates and reviewed analysis are published here.
 
-## Deliverables
+## Direct entrypoints
+
+- [Incident review source](incident-review.svx): root-level signed SVX.
+- [Rendered incident page](index.html): root-level complete HTML, not a redirect or a JavaScript-only shell. Its standard alternate link points to the SVX source.
+
+These entrypoints are generated from the canonical incident, retaining evidence and signature while rebasing local navigation. They do not depend on a reader or scraper interpreting this README. No particular course checker filename rule is assumed.
+
+## Canonical deliverables
 
 - [Incident review SVX](src/routes/kb/incidents/4471-review/+page.svx)
 - [Rendered incident page](rendered/kb/incidents/4471-review/index.html)

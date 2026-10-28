@@ -8,8 +8,9 @@
     owner,
     status,
     reviewed,
+    homeHref = '/kb',
     children,
-  }: { title: string; owner: string; status: string; reviewed: Day; children: Snippet } = $props();
+  }: { title: string; owner: string; status: string; reviewed: Day; homeHref?: string; children: Snippet } = $props();
 
   const age = $derived(daysSince(reviewed));
   const stale = $derived(age > STALE_AFTER_DAYS);
@@ -19,7 +20,7 @@
 
 <div class="kb">
   <header>
-    <a class="crumb" href="/kb">support desk · kb</a>
+    <a class="crumb" href={homeHref}>support desk · kb</a>
     <h1>{title}</h1>
     <p class="meta">
       <span>owner <b>{owner}</b></span>

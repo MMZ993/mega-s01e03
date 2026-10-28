@@ -1,5 +1,5 @@
 // Render the checked-in SVX through mdsvex and Svelte SSR. Reads only this
-// delivery tree, writes ignored compiled modules and rendered route HTML;
+// delivery tree, writes ignored compiled modules, route HTML and root entrypoints;
 // compiler errors and warnings fail the build. No network or credential access.
 import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { resolve, relative, dirname, extname } from 'node:path';
@@ -37,7 +37,16 @@ function compiledImport(specifier, source) {
   return path.startsWith('.') ? path : './' + path;
 }
 
-for (const source of await files(resolve('src'))) {
+// Generate a root source entrypoint from the canonical incident. Rebase its
+// local navigation only; evidence, signature and rendering components stay intact.
+const canonicalIncident = resolve('src/routes/kb/incidents/4471-review/+page.svx');
+const rootIncident = resolve('incident-review.svx');
+const incidentSource = (await readFile(canonicalIncident, 'utf8'))
+  .replace("signature: 'MMZ993'", "homeHref: './index.html'\nsignature: 'MMZ993'")
+  .replace('../../decisions/0002-dedupe-by-cause/index.html', './rendered/kb/decisions/0002-dedupe-by-cause/index.html');
+await writeFile(rootIncident, incidentSource);
+
+for (const source of [...await files(resolve('src')), rootIncident]) {
   const path = relative(root, source);
   let code = await readFile(source, 'utf8');
   if (/\.(svelte|svx)$/.test(source)) {
@@ -52,12 +61,14 @@ for (const source of await files(resolve('src'))) {
   await mkdir(dirname(destination), { recursive: true });
   await writeFile(destination, code);
 }
-for (const source of (await files(resolve('src/routes'))).filter(path => path.endsWith('/+page.svx'))) {
+for (const source of [...(await files(resolve('src/routes'))).filter(path => path.endsWith('/+page.svx')), rootIncident]) {
   const modulePath = resolve(output, relative(root, source)).replace(/\.svx$/, '.js');
   const { default: Page } = await import(pathToFileURL(modulePath));
   const { head, body } = render(Page);
-  const html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' + head + '</head><body>' + body + '</body></html>\n';
-  const destination = resolve('rendered', relative(resolve('src/routes'), dirname(source)), 'index.html');
+  const sourceLink = source === rootIncident ? '<link rel="alternate" type="text/plain" href="./incident-review.svx">' : '';
+  const html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' + sourceLink + head + '</head><body>' + body + '</body></html>\n';
+  const destination = source === rootIncident ? resolve('index.html')
+    : resolve('rendered', relative(resolve('src/routes'), dirname(source)), 'index.html');
   await mkdir(dirname(destination), { recursive: true });
   await writeFile(destination, html);
 }
