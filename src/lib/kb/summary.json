@@ -1,0 +1,31 @@
+{
+  "source": "Course KB export, exported 2026-10-04; snapshot only, not live queue state",
+  "exportRows": 427,
+  "uniqueReports": 412,
+  "groups": [
+    {
+      "cause": "parser",
+      "reports": 379,
+      "tenants": 11,
+      "firstSeen": "2026-04-01",
+      "lastSeen": "2026-10-04",
+      "taggedAs": {
+        "parser": 356,
+        "hint": 23
+      },
+      "readAsOneDay": 5
+    },
+    {
+      "cause": "hint",
+      "reports": 33,
+      "tenants": 3,
+      "firstSeen": "2026-04-17",
+      "lastSeen": "2026-09-22",
+      "taggedAs": {
+        "parser": 15,
+        "hint": 18
+      },
+      "readAsOneDay": 0
+    }
+  ]
+}

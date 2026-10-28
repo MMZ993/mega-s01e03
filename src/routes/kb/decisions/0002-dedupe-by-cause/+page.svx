@@ -1,0 +1,35 @@
+---
+layout: runbook
+title: 'Decision 0002: deduplicate by demonstrated cause'
+owner: support desk
+status: proposed
+reviewed: '2026-10-28'
+signature: 'MMZ993'
+---
+
+<script>
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+## Context
+
+This proposed decision replaces the subject-only rule in accepted decision 0001. Preserve that accepted record unchanged. This proposal has not been accepted by the desk and does not claim to have changed its workflow.
+
+The executable deduplication examples show that identical subjects can hide different defects and different subjects can share one cause. The incident review shows that merging by subject left a distinct form-hint cause without its own ticket.
+
+## Proposed rule
+
+1. Resolve the tenant from the authoritative tenant directory, including locale and booking-form version. Capture report channel and reproduction evidence.
+2. Deduplicate export rows by report ID. Count one report once; preserve its provenance and incoming date separately from its merge date.
+3. Compare causes using the executable classification and corroborating reproduction evidence. A shared subject or intake label is not enough.
+4. Merge only when a known, non-null cause matches. Missing tenant context or an unexplained symptom goes to investigation, not automatic merging.
+5. Keep different causes in separate engineering tickets, even when wording matches. Track each cause's report count and the data snapshot used.
+6. When new evidence contradicts classification, document and investigate it before changing counts or declaring another defect.
+
+## Consequences and validation
+
+The desk must read more context before merging. In return, engineering can see distinct fixes instead of a large misleading ticket. Revalidate against the supplied examples: different subjects with the same cause match; equal subjects with different causes do not; two unknown tenants do not establish a match.
+
+Use the incident review's separate received and merged series when assessing urgency. Link new findings into the KB index, distinguish proposed changes from active policy, and review stale notes against current executable views. Future implementation needs its own tests and approval; this page does not claim it exists.
+
+<RenderStamp {signature} />
