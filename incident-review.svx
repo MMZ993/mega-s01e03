@@ -5,7 +5,7 @@ owner: support desk
 status: closed
 reviewed: '2026-10-28'
 homeHref: './rendered/kb/index.html'
-signature: 'MMZ993'
+signature: 'v1.eyJzdWIiOiI1OTM2IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMxNzM4MDAsImV4cCI6MTc5MzI2MDIwMH0.AgDS7u2XGpnjgOokk2PTv3BmsvWy6FdJkG1z1mynpdE'
 ---
 
 <script>

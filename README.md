@@ -33,7 +33,7 @@ The source KB export is dated 2026-10-04. The incident now also records the late
 
 `summary.json` and `weeks.json` contain aggregate results computed locally from the export's executable logic and unique-ID rules. The raw ZIP, report bodies/IDs, tenant directory, private working notes, credentials, auth/browser state and unrelated project files are not included.
 
-The supplied shared layout, staleness logic and signature component are retained so the page renders under the original conventions. New page frontmatter carries the account holder's MMZ993 signature; `RenderStamp` computes the desk reference from that signature. Decision 0002 is proposed, not accepted; original decision 0001 is not edited.
+The supplied shared layout, staleness logic and signature component are retained so the page renders under the original conventions. New page frontmatter carries the exact course-issued proof designated for publication as the page signature, not a chosen author handle. `RenderStamp` computes the desk reference from that proof. Git commit authorship remains separate. Full course replies, receipts and authentication credentials are not published; the course explicitly requires this particular page proof in the public SVX. Decision 0002 is proposed, not accepted; original decision 0001 is not edited.
 
 ## Rebuild
 
@@ -46,5 +46,7 @@ docker run --rm --network none --user "$(id -u):$(id -g)" -e HOME=/tmp \
   -v "$PWD:/work" -w /work node:24-bookworm-slim npm run build
 node --test test.mjs
 ```
+
+Public tests check proof shape, page consistency and rendering, not the course's cryptographic issuer. Before submission, private validation separately compares the source signature byte-for-byte with the saved start reply's `ticket`. Never treat a rendered stamp alone as proof of issuance.
 
 Dependencies are pinned in `package-lock.json`. The build uses mdsvex and the Svelte compiler/server renderer, not a hand-written HTML approximation. Source data remains a dated aggregate snapshot even when the shared layout computes its review age at render time.

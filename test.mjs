@@ -8,6 +8,15 @@ const summary = JSON.parse(readFileSync('src/lib/kb/summary.json'));
 const weeks = JSON.parse(readFileSync('src/lib/kb/weeks.json'));
 const incident = readFileSync('rendered/kb/incidents/4471-review/index.html', 'utf8');
 const decision = readFileSync('rendered/kb/decisions/0002-dedupe-by-cause/index.html', 'utf8');
+const signature = readFileSync('src/routes/kb/incidents/4471-review/+page.svx', 'utf8').match(/^signature: '([^']+)'$/m)?.[1];
+const reference = deskRef(signature ?? '');
+
+test('all page sources carry the same signed-proof-shaped signature', () => {
+  const paths = ['src/routes/kb/+page.svx', 'src/routes/kb/incidents/4471-review/+page.svx', 'src/routes/kb/decisions/0002-dedupe-by-cause/+page.svx', 'incident-review.svx'];
+  const signatures = paths.map(path => readFileSync(path, 'utf8').match(/^signature: '([^']+)'$/m)?.[1]);
+  assert.ok(signatures.every(value => /^v1\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(value ?? '')), 'Expected issued proof format, not an author label');
+  assert.ok(signatures.every(value => value === signatures[0]), 'Page signatures must match');
+});
 
 test('root entrypoints expose the same signed incident with local navigation', () => {
   const source = readFileSync('incident-review.svx', 'utf8');
@@ -15,7 +24,7 @@ test('root entrypoints expose the same signed incident with local navigation', (
   assert.equal(source, canonical.replace("homeHref: '../../index.html'", "homeHref: './rendered/kb/index.html'")
     .replace('../../decisions/0002-dedupe-by-cause/index.html', './rendered/kb/decisions/0002-dedupe-by-cause/index.html'));
   const html = readFileSync('index.html', 'utf8');
-  for (const marker of ['DR-0Y1V-P5HT', '379', '33', '5 read as a one-day move', '<svg']) assert.ok(html.includes(marker));
+  for (const marker of [reference, '379', '33', '5 read as a one-day move', '<svg']) assert.ok(html.includes(marker));
   assert.ok(html.includes('href="./rendered/kb/index.html"'));
   assert.ok(html.includes('href="./rendered/kb/decisions/0002-dedupe-by-cause/index.html"'));
   assert.ok(html.includes('href="./incident-review.svx"'));
@@ -32,7 +41,7 @@ test('KB index integrates current incident disposition and the proposed decision
   }
   assert.ok(incident.includes('href="../../index.html"'));
   assert.ok(decision.includes('href="../../index.html"'));
-  assert.ok(index.includes('DR-0Y1V-P5HT'));
+  assert.ok(index.includes(reference));
 });
 
 test('distinct causes reconcile with independently verified source counts', () => {
@@ -54,8 +63,7 @@ test('received and merged histories reconcile but do not conflate consolidation'
 });
 
 test('genuine server rendering includes evidence, layout and derived signature', () => {
-  const reference = deskRef('MMZ993');
-  assert.equal(reference, 'DR-0Y1V-P5HT');
+  assert.match(reference, /^DR-[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{4}$/);
   for (const html of [incident, decision]) {
     assert.ok(html.startsWith('<!doctype html>'));
     assert.ok(html.includes(reference));
