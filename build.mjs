@@ -42,7 +42,7 @@ function compiledImport(specifier, source) {
 const canonicalIncident = resolve('src/routes/kb/incidents/4471-review/+page.svx');
 const rootIncident = resolve('incident-review.svx');
 const incidentSource = (await readFile(canonicalIncident, 'utf8'))
-  .replace("signature: 'MMZ993'", "homeHref: './index.html'\nsignature: 'MMZ993'")
+  .replace("homeHref: '../../index.html'", "homeHref: './rendered/kb/index.html'")
   .replace('../../decisions/0002-dedupe-by-cause/index.html', './rendered/kb/decisions/0002-dedupe-by-cause/index.html');
 await writeFile(rootIncident, incidentSource);
 

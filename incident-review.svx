@@ -2,9 +2,9 @@
 layout: runbook
 title: '#4471 review: two causes, not one queued fix'
 owner: support desk
-status: proposed
+status: closed
 reviewed: '2026-10-28'
-homeHref: './index.html'
+homeHref: './rendered/kb/index.html'
 signature: 'MMZ993'
 ---
 
@@ -13,7 +13,16 @@ signature: 'MMZ993'
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 </script>
 
-This review supersedes the interpretation of the exported incident page, not its historical record. The export was taken on 4 October. This is a snapshot analysis, not a claim about the desk's current queue or deployed fixes.
+This review supersedes the interpretation of the exported incident page, not its historical record. The counts below are the 4 October export snapshot. A later course engineering update supplies the incident disposition; that update is separate from the report data and from independent production verification.
+
+## Current disposition: closed 05 Oct
+
+The course engineering update on the Challenge page marks #4471 closed on 5 October:
+
+- **Parser — FIXED:** `fix(dates): parse dd/mm for eu locales`. The corresponding [parser issue](https://github.com/MMZ993/mega-s01e03/issues/1) is closed as completed.
+- **Hint — WON’T FIX:** booking-v3 form retired. The corresponding [hint issue](https://github.com/MMZ993/mega-s01e03/issues/2) is closed as not planned, not falsely marked fixed.
+
+These are the course desk's reported dispositions. We did not implement or independently verify the production change. A fresh, cache-bypassed download still matches the original export byte-for-byte; it contains historical reports, not new post-fix measurements.
 
 ## What the executable evidence shows
 
@@ -23,12 +32,12 @@ The published counts come from the supplied `uniqueById`, `groupByCause`, `cause
 
 Cause follows the tenant's locale, booking-form version and report channel. The browser locale and intake label are not authoritative. Determine day-first ordering with `Intl.DateTimeFormat(...).formatToParts`, as the supplied code does; do not maintain a guessed locale list.
 
-## Separate engineering tickets
+## Distinct problems in the historical reports
 
-- **Parser:** the shared parser reads month-first although the tenant writes day-first. This is the majority cause belonging to the original incident. Fix parsing to respect an explicit date-format contract; test day-first app/email paths and booking-v2 forms. See [parser issue](https://github.com/MMZ993/mega-s01e03/issues/1).
-- **Hint:** booking-v3 prints `MM/DD/YYYY`, but its form reads the tenant's day-first format. Correct the displayed hint and its consistency with actual interpretation. A parser-only fix does not establish that this form defect is fixed. See [hint issue](https://github.com/MMZ993/mega-s01e03/issues/2).
+- **Parser:** the shared parser reads month-first although the tenant writes day-first. This is the majority cause belonging to the original incident. Its corrective contract is day-first parsing, with regression coverage for day-first app/email paths and booking-v2 forms; the later desk update reports the parser fixed. See [parser issue](https://github.com/MMZ993/mega-s01e03/issues/1).
+- **Hint:** booking-v3 prints `MM/DD/YYYY`, but its form reads the tenant's day-first format. The hint and interpretation needed to agree. The desk retired booking-v3 rather than fixing this hint; a parser-only fix must not be mistaken for a hint fix. See [hint issue](https://github.com/MMZ993/mega-s01e03/issues/2).
 
-The original cause table explicitly gives the hint group no ticket of its own. The incident's statement that there is one issue and one queued fix is therefore not supported by its own rendered evidence. The fixes above are proposals; neither implementation nor resolution is verified.
+The original cause table gave the hint group no ticket of its own. The exported incident's statement that there was one issue and one queued fix was therefore not supported by its own rendered evidence. Separate public issues now preserve both causes and their different reported closure reasons.
 
 ## Symptoms are not proven root causes
 

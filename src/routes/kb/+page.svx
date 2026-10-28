@@ -1,0 +1,26 @@
+---
+layout: runbook
+title: 'Support KB: #4471 review and decision'
+owner: support desk
+status: living
+reviewed: '2026-10-28'
+homeHref: './index.html'
+signature: 'MMZ993'
+---
+
+<script>
+  import KbIndex from '#lib/kb/KbIndex.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+This delivery adds an incident review and a proposed replacement deduplication decision to the support knowledge base. It is not a complete copy of the original export: raw reports, tenant records and unchanged historical pages remain in the course source.
+
+The incident review distinguishes the 4 October report snapshot from the later course engineering update: parser fixed; booking-v3 hint not planned because the form was retired. The replacement policy remains proposed, not accepted. Accepted decision 0001 is not edited.
+
+## Pages
+
+<KbIndex />
+
+Titles, owners, status and review dates above come from each page's frontmatter, not duplicate handwritten index labels. Pages link back to this index; the root site entrypoint exposes the incident directly.
+
+<RenderStamp {signature} />

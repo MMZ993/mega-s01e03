@@ -4,6 +4,7 @@ title: 'Decision 0002: deduplicate by demonstrated cause'
 owner: support desk
 status: proposed
 reviewed: '2026-10-28'
+homeHref: '../../index.html'
 signature: 'MMZ993'
 ---
 

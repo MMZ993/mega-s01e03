@@ -12,15 +12,27 @@ const decision = readFileSync('rendered/kb/decisions/0002-dedupe-by-cause/index.
 test('root entrypoints expose the same signed incident with local navigation', () => {
   const source = readFileSync('incident-review.svx', 'utf8');
   const canonical = readFileSync('src/routes/kb/incidents/4471-review/+page.svx', 'utf8');
-  assert.equal(source, canonical.replace("signature: 'MMZ993'", "homeHref: './index.html'\nsignature: 'MMZ993'")
+  assert.equal(source, canonical.replace("homeHref: '../../index.html'", "homeHref: './rendered/kb/index.html'")
     .replace('../../decisions/0002-dedupe-by-cause/index.html', './rendered/kb/decisions/0002-dedupe-by-cause/index.html'));
   const html = readFileSync('index.html', 'utf8');
   for (const marker of ['DR-0Y1V-P5HT', '379', '33', '5 read as a one-day move', '<svg']) assert.ok(html.includes(marker));
-  assert.ok(html.includes('href="./index.html"'));
+  assert.ok(html.includes('href="./rendered/kb/index.html"'));
   assert.ok(html.includes('href="./rendered/kb/decisions/0002-dedupe-by-cause/index.html"'));
   assert.ok(html.includes('href="./incident-review.svx"'));
   assert.ok(!html.includes('href="/kb"'));
   assert.ok(!html.includes('../../decisions/'));
+});
+
+test('KB index integrates current incident disposition and the proposed decision', () => {
+  const index = readFileSync('rendered/kb/index.html', 'utf8');
+  assert.ok(index.includes('href="./incidents/4471-review/index.html"'));
+  assert.ok(index.includes('href="./decisions/0002-dedupe-by-cause/index.html"'));
+  for (const html of [incident, readFileSync('index.html', 'utf8')]) {
+    for (const marker of ['closed 05 Oct', 'FIXED', 'WON’T FIX', 'booking-v3 form retired', 'course engineering update']) assert.ok(html.includes(marker), marker);
+  }
+  assert.ok(incident.includes('href="../../index.html"'));
+  assert.ok(decision.includes('href="../../index.html"'));
+  assert.ok(index.includes('DR-0Y1V-P5HT'));
 });
 
 test('distinct causes reconcile with independently verified source counts', () => {

@@ -17,6 +17,7 @@ These entrypoints are generated from the canonical incident, retaining evidence 
 
 ## Canonical deliverables
 
+- [KB index source](src/routes/kb/+page.svx) and [rendered KB index](rendered/kb/index.html), with metadata-driven links to the added pages.
 - [Incident review SVX](src/routes/kb/incidents/4471-review/+page.svx)
 - [Rendered incident page](rendered/kb/incidents/4471-review/index.html)
 - [Proposed replacement decision SVX](src/routes/kb/decisions/0002-dedupe-by-cause/+page.svx)
@@ -28,7 +29,7 @@ Download the repository and open the rendered HTML files in a browser to see the
 
 ## Evidence boundaries
 
-The source KB export is dated 2026-10-04. This review does not claim live queue access or deployed fixes. The export contains 427 rows but 412 unique reports: two computed causes, not one. Five reports read by the desk as one-day moves remain included in the parser count; this is not proof of a third defect.
+The source KB export is dated 2026-10-04. The incident now also records the later course engineering update (closed 5 October): parser fixed, hint not planned because booking-v3 was retired. These are the desk's reported dispositions, not our implementation or independent production verification. The report counts remain the original snapshot. The export contains 427 rows but 412 unique reports: two computed causes, not one. Five reports read by the desk as one-day moves remain included in the parser count; this is not proof of a third defect.
 
 `summary.json` and `weeks.json` contain aggregate results computed locally from the export's executable logic and unique-ID rules. The raw ZIP, report bodies/IDs, tenant directory, private working notes, credentials, auth/browser state and unrelated project files are not included.
 
